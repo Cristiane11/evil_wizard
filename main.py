@@ -5,8 +5,8 @@ class Character:
         self.health = health
         self.attack_power = attack_power
         self.max_health = health
-        self.evade_next = False
-        self.shield_next = False  
+        self.evade_next = False # created evade attribute
+        self.shield_next = False # created shield attribute 
           
 
     def attack(self, opponent):
@@ -14,6 +14,7 @@ class Character:
         print(f"{self.name} attacks {opponent.name} for {self.attack_power} damage!")
         if opponent.health <= 0:
             print(f"{opponent.name} has been defeated!")
+    #Creted the heal
     def heal(self):
         heal_amount = 20
         self.health = min(self.max_health, self.health + heal_amount)
@@ -41,9 +42,23 @@ class EvilWizard(Character):
         print(f"{self.name} regenerates 5 health! Current health: {self.health}")
 
 # Create Archer class
-
+class Archer(Character):
+    def __init__(self, name):
+        super().__init__(name, health=110, attack_power=30)
+    # Optionally, add a special ability method here 
+    def special_ability(self, opponent):
+        # Example for Archer: double attack
+        opponent.health -= self.attack_power * 2
+        print(f"{self.name} uses Double Shot on {opponent.name} for {self.attack_power * 2} damage!")
 # Create Paladin class 
-
+class Paladin(Character):   
+    def __init__(self, name):
+        super().__init__(name, health=130, attack_power=20)
+    # Optionally, add a special ability method here 
+    def special_ability(self, opponent):
+        # Example for Paladin: shield (reduce next attack damage by half)
+        self.shield_next = True
+        print(f"{self.name} uses Shield! Next attack damage will be reduced by half.")
 
 def create_character():
     print("Choose your character class:")
@@ -60,9 +75,9 @@ def create_character():
     elif class_choice == '2':
         return Mage(name)
     elif class_choice == '3':
-        pass  # Implement Archer class
+        return Archer(name)  # Implement Archer class
     elif class_choice == '4':
-        pass  # Implement Paladin class
+        return Paladin(name)  # Implement Paladin class
     else:
         print("Invalid choice. Defaulting to Warrior.")
         return Warrior(name)
@@ -80,9 +95,9 @@ def battle(player, wizard):
         if choice == '1':
             player.attack(wizard)
         elif choice == '2':
-            pass  # Implement special abilities
+            player.special_ability(wizard)  # Implement special abilities
         elif choice == '3':
-            pass  # Implement heal method
+            player.heal()  # Implement heal method
         elif choice == '4':
             player.display_stats()
         else:
