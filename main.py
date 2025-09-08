@@ -14,7 +14,7 @@ class Character:
         print(f"{self.name} attacks {opponent.name} for {self.attack_power} damage!")
         if opponent.health <= 0:
             print(f"{opponent.name} has been defeated!")
-    #Creted the heal
+    #Created the heal
     def heal(self):
         heal_amount = 20
         self.health = min(self.max_health, self.health + heal_amount)
