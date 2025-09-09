@@ -10,11 +10,24 @@ class Character:
           
 
     def attack(self, opponent):
-        opponent.health -= self.attack_power
-        print(f"{self.name} attacks {opponent.name} for {self.attack_power} damage!")
+        damage = random.randint(self.attack_power - 5, self.attack_power + 5)
+        if opponent.evade_next:
+            print(f"{opponent.name} evades the attack!")
+            opponent.evade_next = False
+            return
+        if opponent.shield_next:
+            damage //= 2
+            opponent.shield_next = False
+            print(f"{opponent.name} blocks the attack with a shield!")
+        opponent.health -= damage
+        print(f"{self.name} attacks {opponent.name} for {damage} damage!")
         if opponent.health <= 0:
             print(f"{opponent.name} has been defeated!")
-    #Created the heal
+
+
+
+
+    #Creted the heal
     def heal(self):
         heal_amount = 20
         self.health = min(self.max_health, self.health + heal_amount)
@@ -50,6 +63,9 @@ class Archer(Character):
         # Example for Archer: double attack
         opponent.health -= self.attack_power * 2
         print(f"{self.name} uses Double Shot on {opponent.name} for {self.attack_power * 2} damage!")
+    def evade(self):
+        self.evade_next = True
+        print(f"{self.name} prepares to evade the next attack!")
 # Create Paladin class 
 class Paladin(Character):   
     def __init__(self, name):
@@ -59,7 +75,10 @@ class Paladin(Character):
         # Example for Paladin: shield (reduce next attack damage by half)
         self.shield_next = True
         print(f"{self.name} uses Shield! Next attack damage will be reduced by half.")
-
+    def holy_strike(self, opponent):
+        damage = self.attack_power + 15
+        opponent.health -= damage
+        print(f"{self.name} uses Holy Strike on {opponent.name} for {damage} damage!")
 def create_character():
     print("Choose your character class:")
     print("1. Warrior")
@@ -87,18 +106,31 @@ def battle(player, wizard):
         print("\n--- Your Turn ---")
         print("1. Attack")
         print("2. Use Special Ability")
-        print("3. Heal")
-        print("4. View Stats")
+        print("3. Special Ability 2")
+        print("4. Heal")
+        print("5. View Stats")
 
         choice = input("Choose an action: ")
 
         if choice == '1':
             player.attack(wizard)
         elif choice == '2':
-            player.special_ability(wizard)  # Implement special abilities
+            if isinstance(player, Archer):
+                player.special_ability(wizard)  
+            elif isinstance(player, Paladin):
+                player.holy_strike(wizard)
+            else:
+                print("Your class does not have Special Ability 1.")
         elif choice == '3':
-            player.heal()  # Implement heal method
+            if isinstance(player, Archer):
+                player.evade()
+            elif isinstance(player, Paladin):
+                player.special_ability(wizard)  # Shield
+            else:
+                print("Your class does not have Special Ability 2.")
         elif choice == '4':
+            player.heal()
+        elif choice == '5':                  
             player.display_stats()
         else:
             print("Invalid choice. Try again.")
