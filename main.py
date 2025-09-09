@@ -1,3 +1,4 @@
+import random3
 # Base Character class
 class Character:
     def __init__(self, name, health, attack_power):
@@ -7,8 +8,7 @@ class Character:
         self.max_health = health
         self.evade_next = False # created evade attribute
         self.shield_next = False # created shield attribute 
-          
-
+    # Modified the attack method to include special abilities
     def attack(self, opponent):
         damage = random.randint(self.attack_power - 5, self.attack_power + 5)
         if opponent.evade_next:
@@ -23,10 +23,6 @@ class Character:
         print(f"{self.name} attacks {opponent.name} for {damage} damage!")
         if opponent.health <= 0:
             print(f"{opponent.name} has been defeated!")
-
-
-
-
     #Creted the heal
     def heal(self):
         heal_amount = 20
